@@ -34,6 +34,7 @@ elements where ACCESSOR is called to return a string."
 		 (humane-compare e1 e2)))))
 
 (defun humane-compare (string1 string2)
+  "Returns non-nil if STRING1 should sort before STRING2."
   (let ((list1 (humane-transform string1))
 	(list2 (humane-transform string2))
 	c1 c2
@@ -43,18 +44,14 @@ elements where ACCESSOR is called to return a string."
       (setq c1 (pop list1)
 	    c2 (pop list2))
       (cond
-       ((and (numberp c1)
-	     (stringp c2))
-	(setq result nil))
-       ((and (stringp c1)
-	     (numberp c2))
+       ((and (numberp c1) (stringp c2))
 	(setq result t))
-       ((and (numberp c1)
-	     (numberp c2)
+       ((and (stringp c1) (numberp c2))
+	(setq result nil))
+       ((and (numberp c1) (numberp c2)
 	     (not (= c1 c2)))
 	(setq result (< c1 c2)))
-       ((and (stringp c1)
-	     (stringp c2)
+       ((and (stringp c1) (stringp c2)
 	     (not (equal c1 c2)))
 	(setq result (string< c1 c2)))))
     (if (eq result :unfound)
